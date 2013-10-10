@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.0
+Version: 1.1
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -38,20 +38,24 @@ function sf_constantcontact_ajax() {
 	ob_clean();
 	$set=get_option('sf_mcc');
 	if (empty($set['log'])||empty($set['pwd']))
-		echo 'Invalid settings';
+		echo 'Plugin settings incomplete';
 	else if (empty($_POST['grp']))
-		echo 'No contact group specified';
+		echo 'No contact list specified';
 	else if (empty($_POST['eml']))
 		echo 'No email provided';
 	else {
-		$rsp=file_get_contents("http://ccprod.roving.com/roving/wdk/API_AddSiteVisitor.jsp?"
+		$rsp=wp_remote_get("http://ccprod.roving.com/roving/wdk/API_AddSiteVisitor.jsp?"
 			.'loginName='.urlencode($set['log'])
 			.'&loginPassword='.urlencode($set['pwd'])
 			.'&ea='.urlencode($_POST['eml'])
 			.'&ic='.urlencode($_POST['grp']));
-		$rsp=explode("\n",$rsp);
-		if (count($rsp)>1&&intval($rsp[0]))
-			echo $rsp[1];
+		if (is_wp_error($rsp))
+			echo 'Could not connect to Constant Contact';
+		else {
+			$rsp=explode("\n",$rsp['body']);
+			if (intval($rsp[0]))
+				echo count($rsp)>1?$rsp[1]:(intval($rsp[0])==400?'Constant Contact username/password not accepted':'Constant Contact error');
+		}
 	}
 	die();
 }
@@ -103,15 +107,15 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 			.(empty($instance['txt'])?'':('<p>'.$instance['txt'].'</p>'))
 			.'<input type="hidden" name="grp" value="'.esc_attr($instance['grp']).'" />'
 			.'<input type="text" name="eml" class="input" placeholder="'.__('Email').'" />'
-			.'<input type="submit" value="'.esc_attr($instance['btn']).'" onclick="'.$id.'_submit()" />'
+			.'<input type="submit" value="'.esc_attr($instance['btn']).'" onclick="'.$id.'_submit(this.parentNode)" />'
 			.'</div>'
-			.'<script>function '.$id.'_submit(){'
-				.'for(var n=document.getElementById("'.$id.'_form").firstChild,eml=false,val=[];n;n=n.nextSibling) if (n.nodeName=="INPUT"&&n.name){if (n.name=="eml"&&n.value) eml=true;val.push(n.name+"="+encodeURIComponent(n.value));}'
+			.'<script>function '.$id.'_submit(n){'
+				.'for(var i=n.firstChild,eml=false,val=[];i;i=i.nextSibling) if (i.nodeName=="INPUT"&&i.name){if (i.name=="eml"&&i.value) eml=true;val.push(i.name+"="+encodeURIComponent(i.value));}'
 				.'if (!eml) {alert("Please enter an email address");return;}'
 				.'var xml=new XMLHttpRequest();'
 				.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
 				.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
-				.'xml.onreadystatechange=function(){if (this.readyState==4){if (this.status==200){if (this.responseText) alert(this.responseText); else document.getElementById("'.$id.'_form").innerHTML="'.esc_attr($instance['msg']).'";} else alert(this.statusText);}};'
+				.'xml.onreadystatechange=function(){if (this.readyState==4){if (this.status==200){if (this.responseText) alert(this.responseText); else n.innerHTML="'.esc_attr($instance['msg']).'";} else alert(this.statusText);}};'
 				.'xml.send("action=constantcontactadd&"+val.join("&"));'
 			.'}</script>';
 		echo $after_widget;
