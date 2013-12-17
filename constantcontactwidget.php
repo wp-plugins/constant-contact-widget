@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.1
+Version: 1.2
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -131,11 +131,11 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 	}
 	public function form($instance) {
 		$instance=wp_parse_args($instance,array('title'=>'','txt'=>'','btn'=>'Subscribe','log'=>'','pwd'=>'','grp'=>'General Interest','msg'=>'Thank you, you\'ve been added to the list!'));
-		echo '<p><label for="'.$this->get_field_id('title').'">Title:</label><input class="widefat" id="'.$this->get_field_id('title').'" name="'.$this->get_field_name('title').'" type="text" value="'.attribute_escape($instance['title']).'" /></p>'
-			.'<p><label for="'.$this->get_field_id('txt').'">Description:</label><input class="widefat" id="'.$this->get_field_id('txt').'" name="'.$this->get_field_name('txt').'" type="text" value="'.attribute_escape($instance['txt']).'" placeholder="description" /></p>'
-			.'<p><label for="'.$this->get_field_id('btn').'">Button Text:</label><input class="widefat" id="'.$this->get_field_id('btn').'" name="'.$this->get_field_name('btn').'" type="text" value="'.attribute_escape($instance['btn']).'" placeholder="button text" /></p>'
-			.'<p><label for="'.$this->get_field_id('grp').'">Contact List Name:</label><input class="widefat" id="'.$this->get_field_id('grp').'" name="'.$this->get_field_name('grp').'" type="text" value="'.attribute_escape($instance['grp']).'" /></p>'
-			.'<p><label for="'.$this->get_field_id('msg').'">Success Message:</label><input class="widefat" id="'.$this->get_field_id('msg').'" name="'.$this->get_field_name('msg').'" type="text" value="'.attribute_escape($instance['msg']).'" /></p>';
+		echo '<p><label for="'.$this->get_field_id('title').'">Title:</label><input class="widefat" id="'.$this->get_field_id('title').'" name="'.$this->get_field_name('title').'" type="text" value="'.esc_attr($instance['title']).'" /></p>'
+			.'<p><label for="'.$this->get_field_id('txt').'">Description:</label><input class="widefat" id="'.$this->get_field_id('txt').'" name="'.$this->get_field_name('txt').'" type="text" value="'.esc_attr($instance['txt']).'" placeholder="description" /></p>'
+			.'<p><label for="'.$this->get_field_id('btn').'">Button Text:</label><input class="widefat" id="'.$this->get_field_id('btn').'" name="'.$this->get_field_name('btn').'" type="text" value="'.esc_attr($instance['btn']).'" placeholder="button text" /></p>'
+			.'<p><label for="'.$this->get_field_id('grp').'">Contact List Name:</label><input class="widefat" id="'.$this->get_field_id('grp').'" name="'.$this->get_field_name('grp').'" type="text" value="'.esc_attr($instance['grp']).'" /></p>'
+			.'<p><label for="'.$this->get_field_id('msg').'">Success Message:</label><input class="widefat" id="'.$this->get_field_id('msg').'" name="'.$this->get_field_name('msg').'" type="text" value="'.esc_attr($instance['msg']).'" /></p>';
 	}
 }}
 
