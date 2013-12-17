@@ -4,7 +4,7 @@ Donate link: http://memberfind.me
 Tags: contant contact
 Requires at least: 3.0.1
 Tested up to: 3.8
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,3 +40,6 @@ Note: Constant Contact account required.
 
 = 1.2 =
 * Replaced WP deprecated function attribute_escape
+
+= 1.3 =
+* Option to collect names
