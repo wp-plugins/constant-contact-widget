@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.3
+Version: 1.4
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -116,13 +116,13 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 			.'<input type="submit" value="'.esc_attr($instance['btn']).'" onclick="'.$id.'_submit(this.parentNode)" />'
 			.'</div>'
 			.'<script>function '.$id.'_submit(n){'
-				.'for(var i=n.firstChild,eml=false,val=[];i;i=i.nextSibling) if (i.nodeName=="INPUT"&&i.name){if (i.name=="eml"&&i.value) eml=true;val.push(i.name+"="+encodeURIComponent(i.value));}'
-				.'if (!eml) {alert("Please enter an email address");return;}'
+				.'for(var i=n.firstChild,eml=false,val=["action=constantcontactadd"];i;i=i.nextSibling)if(!(i.nodeName!="INPUT"||!i.name)){if(!(i.name!="eml"||!i.value)) eml=true;val.push(i.name+"="+encodeURIComponent(i.value));}'
+				.'if(!eml){alert("Please enter an email address");return;}'
 				.'var xml=new XMLHttpRequest();'
 				.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
 				.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
-				.'xml.onreadystatechange=function(){if (this.readyState==4){if (this.status==200){if (this.responseText) alert(this.responseText); else n.innerHTML="'.esc_attr($instance['msg']).'";} else alert(this.statusText);}};'
-				.'xml.send("action=constantcontactadd&"+val.join("&"));'
+				.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else n.innerHTML="'.esc_attr($instance['msg']).'";} else alert(this.statusText);}};'
+				.'xml.send(val.join(String.fromCharCode(38)));'
 			.'}</script>';
 		echo $after_widget;
 	}
