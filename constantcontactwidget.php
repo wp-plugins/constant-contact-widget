@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.4
+Version: 1.5
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -38,11 +38,11 @@ function sf_constantcontact_ajax() {
 	ob_clean();
 	$set=get_option('sf_mcc');
 	if (empty($set['log'])||empty($set['pwd']))
-		echo 'Plugin settings incomplete';
+		echo __('Plugin settings incomplete');
 	else if (empty($_POST['grp']))
-		echo 'No contact list specified';
+		echo __('No contact list specified');
 	else if (empty($_POST['eml']))
-		echo 'No email provided';
+		echo __('No email provided');
 	else {
 		$rsp=wp_remote_get("http://ccprod.roving.com/roving/wdk/API_AddSiteVisitor.jsp?"
 			.'loginName='.urlencode($set['log'])
@@ -52,11 +52,11 @@ function sf_constantcontact_ajax() {
 			.(empty($_POST['fnm'])?'':('&First_Name='.urlencode(strip_tags($_POST['fnm']))))
 			.(empty($_POST['lnm'])?'':('&Last_Name='.urlencode(strip_tags($_POST['lnm'])))));
 		if (is_wp_error($rsp))
-			echo 'Could not connect to Constant Contact';
+			echo __('Could not connect to Constant Contact');
 		else {
 			$rsp=explode("\n",$rsp['body']);
 			if (intval($rsp[0]))
-				echo count($rsp)>1?$rsp[1]:(intval($rsp[0])==400?'Constant Contact username/password not accepted':'Constant Contact error');
+				echo count($rsp)>1?$rsp[1]:(intval($rsp[0])==400?__('Constant Contact username/password not accepted'):__('Constant Contact error'));
 		}
 	}
 	die();
@@ -117,11 +117,11 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 			.'</div>'
 			.'<script>function '.$id.'_submit(n){'
 				.'for(var i=n.firstChild,eml=false,val=["action=constantcontactadd"];i;i=i.nextSibling)if(!(i.nodeName!="INPUT"||!i.name)){if(!(i.name!="eml"||!i.value)) eml=true;val.push(i.name+"="+encodeURIComponent(i.value));}'
-				.'if(!eml){alert("Please enter an email address");return;}'
+				.'if(!eml){alert("'.__('Please enter an email address').'");return;}'
 				.'var xml=new XMLHttpRequest();'
 				.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
 				.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
-				.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else n.innerHTML="'.esc_attr($instance['msg']).'";} else alert(this.statusText);}};'
+				.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$instance['msg'])?('setTimeout(\'window.location="'.esc_attr($instance['msg']).'";\',100);'):('n.innerHTML="'.esc_attr($instance['msg']).'";')).'} else alert(this.statusText);}};'
 				.'xml.send(val.join(String.fromCharCode(38)));'
 			.'}</script>';
 		echo $after_widget;
@@ -142,7 +142,7 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 			.'<p><label for="'.$this->get_field_id('txt').'">Description:</label><input class="widefat" id="'.$this->get_field_id('txt').'" name="'.$this->get_field_name('txt').'" type="text" value="'.esc_attr($instance['txt']).'" placeholder="description" /></p>'
 			.'<p><label for="'.$this->get_field_id('btn').'">Button Text:</label><input class="widefat" id="'.$this->get_field_id('btn').'" name="'.$this->get_field_name('btn').'" type="text" value="'.esc_attr($instance['btn']).'" placeholder="button text" /></p>'
 			.'<p><label for="'.$this->get_field_id('grp').'">Contact List Name:</label><input class="widefat" id="'.$this->get_field_id('grp').'" name="'.$this->get_field_name('grp').'" type="text" value="'.esc_attr($instance['grp']).'" /></p>'
-			.'<p><label for="'.$this->get_field_id('msg').'">Success Message:</label><input class="widefat" id="'.$this->get_field_id('msg').'" name="'.$this->get_field_name('msg').'" type="text" value="'.esc_attr($instance['msg']).'" /></p>'
+			.'<p><label for="'.$this->get_field_id('msg').'">Success Message/URL:</label><input class="widefat" id="'.$this->get_field_id('msg').'" name="'.$this->get_field_name('msg').'" type="text" value="'.esc_attr($instance['msg']).'" /></p>'
 			.'<p><input type="checkbox" id="'.$this->get_field_id('nam').'" name="'.$this->get_field_name('nam').'" value="1"'.(empty($instance['nam'])?'':' checked').'> <label for="'.$this->get_field_id('nam').'">Ask for first and last name</label></p>';
 	}
 }}
