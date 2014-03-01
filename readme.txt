@@ -3,8 +3,8 @@ Contributors: sourcefound
 Donate link: http://memberfind.me
 Tags: contant contact
 Requires at least: 3.0.1
-Tested up to: 3.8
-Stable tag: 1.5
+Tested up to: 3.8.1
+Stable tag: 1.6
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,3 +49,6 @@ Note: Constant Contact account required.
 
 = 1.5 =
 * Allows redirection to url on success
+
+= 1.6 =
+* Wrapped in form element, allows enter key to submit form

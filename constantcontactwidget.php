@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.5
+Version: 1.6
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -105,7 +105,7 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 			echo $before_widget;
 		if (!empty($title))
 			echo $before_title.$title.$after_title;
-		echo '<div id="'.$id.'_form">'
+		echo '<form id="'.$id.'_form" onsubmit="return '.$id.'_submit(this);">'
 			.(empty($instance['txt'])?'':('<p>'.$instance['txt'].'</p>'))
 			.'<input type="hidden" name="grp" value="'.esc_attr($instance['grp']).'" />'
 			.(empty($instance['nam'])
@@ -113,16 +113,17 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 				:('<label for="fnm">'.__('First Name').'</label><input type="text" name="fnm" class="input" />'
 				.'<label for="lnm">'.__('Last Name').'</label><input type="text" name="lnm" class="input" />'
 				.'<label for="eml">'.__('Email').'</label><input type="text" name="eml" class="input" />'))
-			.'<input type="submit" value="'.esc_attr($instance['btn']).'" onclick="'.$id.'_submit(this.parentNode)" />'
-			.'</div>'
+			.'<input type="submit" value="'.esc_attr($instance['btn']).'" />'
+			.'</form>'
 			.'<script>function '.$id.'_submit(n){'
 				.'for(var i=n.firstChild,eml=false,val=["action=constantcontactadd"];i;i=i.nextSibling)if(!(i.nodeName!="INPUT"||!i.name)){if(!(i.name!="eml"||!i.value)) eml=true;val.push(i.name+"="+encodeURIComponent(i.value));}'
-				.'if(!eml){alert("'.__('Please enter an email address').'");return;}'
+				.'if(!eml){alert("'.__('Please enter an email address').'");return false;}'
 				.'var xml=new XMLHttpRequest();'
 				.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
 				.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
 				.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$instance['msg'])?('setTimeout(\'window.location="'.esc_attr($instance['msg']).'";\',100);'):('n.innerHTML="'.esc_attr($instance['msg']).'";')).'} else alert(this.statusText);}};'
 				.'xml.send(val.join(String.fromCharCode(38)));'
+				.'return false;'
 			.'}</script>';
 		echo $after_widget;
 	}
