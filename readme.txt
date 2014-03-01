@@ -34,7 +34,7 @@ Note: Constant Contact account required.
 1. You can specify either a success message or an URL. Upon successful submission of the address to Constant Contact, if a message is used, that message will replace the form in the Constant Contact widget box. If a URL is specified, the user will be redirected to that URL.
 1. Optionally you can also include the first and last name fields in the form.
 
-== FAQ ==
+== Frequently Asked Questions ==
 
 = Can I use this plugin without a Constant Contact account? =
 
