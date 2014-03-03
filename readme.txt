@@ -8,25 +8,25 @@ Stable tag: 1.6
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A really lightweight, clean and simple Constant Contact widget that collects email addresses to a Constant Contact list.
+Constant Contact plugin that adds a really lightweight, clean and simple widget that collects email addresses to a Constant Contact list.
 
 == Description ==
 
-Lightweight and clean Constant Contact plugin that adds a simple widget that collects email addresses to a contact list in your Constant Contact account:
+Constant Contact Widget adds a really lightweight, clean and simple widget that collects email addresses to a contact list in your Constant Contact account.
 
-* No advertising or links.
-* Lightweight code (~120 LOC).
-* Ajax form submission - no page refresh and minimizes spam.
 * PageSpeed optimized with minimized HTML and inlined javascript (entire widget adds about 1200 bytes).
 * Cross-browser compliant javascript with no dependencies (no jQuery required).
-* No CSS so you can apply your own.
+* Lightweight code (~120 lines of PHP code) that does not slow down your site.
+* Ajax form submission - no page refresh and minimizes spam.
+* No advertising or links.
+* No CSS so you can style it your own.
 * Supports multiple Constant Contact widgets with separate settings (eg. you can specify a different Constant Contact list for each widget).
 
 Note: Constant Contact account required.
 
 == Installation ==
 
-1. Install the Constant Contact Widget plugin via the WordPress.org plugin directory or upload it to your plugins directory.
+1. Constant Contact Widget plugin can be downloaded from the WordPress.org plugin directory or uploaded directly.
 1. Activate the Constant Contact Widget plugin.
 1. Go to Settings > Constant Contact and enter your Constant Contact login and password.
 1. Go to Appearance > Widgets and add the Constant Contact widget to the appropriate sidebar.
