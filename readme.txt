@@ -12,17 +12,30 @@ Constant Contact plugin that adds a really lightweight, clean and simple widget 
 
 == Description ==
 
-Constant Contact Widget adds a really lightweight, clean and simple widget that collects email addresses to a contact list in your Constant Contact account.
+Constant Contact Widget is a really lightweight, clean and simple widget that collects email addresses to a contact list in your Constant Contact account<sup>1</sup>.
 
 * PageSpeed optimized with minimized HTML and inlined javascript (entire widget adds about 1200 bytes).
+* Ajax form submission - no page refresh and minimizes spam.
 * Cross-browser compliant javascript with no dependencies (no jQuery required).
 * Lightweight code (~120 lines of PHP code) that does not slow down your site.
-* Ajax form submission - no page refresh and minimizes spam.
-* No advertising or links.
-* No CSS so you can style it your own.
-* Supports multiple Constant Contact widgets with separate settings (eg. you can specify a different Constant Contact list for each widget).
+* Clean and simple, with no spurious text, images, advertising or links.
+* No CSS so you can style it to match your theme.
+* Does not send any information to our servers or any other third party servers, it only interfaces with Constant Contact<sup>2</sup>.
 
-Note: Constant Contact account required.
+Constant Contact Widget lets you setup:
+
+* Title for the Constant Contact widget
+* Description
+* Text for the submit button
+* Constant Contact list to add the email address to
+* Option to request first and last name
+* Display a thank you message or redirect to a URL upon successful submission to Constant Contact
+
+Constant Contact Widget supports multiple widgets each with separate settings - for example, you can specify a different Constant Contact list for each Constant Contact widget.
+
+<sup>1</sup> Constant Contact account required.
+
+<sup>2</sup> This plugin connects to Constant Contact API at ccprod.roving.com, note that Roving Software (roving.com) is the parent company of Constant Contact. 
 
 == Installation ==
 
@@ -32,7 +45,7 @@ Note: Constant Contact account required.
 1. Go to Appearance > Widgets and add the Constant Contact widget to the appropriate sidebar.
 1. Under the Constant Contact widget settings, you can set the title, description, button text and the name of the Constant Contact list you want the email address to be added to.
 1. You can specify either a success message or an URL. Upon successful submission of the address to Constant Contact, if a message is used, that message will replace the form in the Constant Contact widget box. If a URL is specified, the user will be redirected to that URL.
-1. Optionally you can also include the first and last name fields in the form.
+1. Option you can also request the first and last name fields on the form.
 
 == Frequently Asked Questions ==
 
@@ -42,7 +55,7 @@ This widget is designed to add a email address to your Constant Contact list, so
 
 = How do I style the Constant Contact widget? =
 
-The Constant Contact widget is container within a widget div element with the class "widget_sf_widget_constantcontact". 
+The Constant Contact widget is contained within a widget div element with the class "widget_sf_widget_constantcontact". 
 
 Using your favourite browser developer tool, see what styles your theme is applying to the widget, and add the class ".widget_sf_widget_constantcontact" to increase the priority of your style to target the Constant Contact widget.
 
