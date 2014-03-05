@@ -12,7 +12,7 @@ Constant Contact plugin that adds a really lightweight, clean and simple widget 
 
 == Description ==
 
-Constant Contact Widget is a really lightweight, clean and simple widget that collects email addresses to a contact list in your Constant Contact account[^1].
+Constant Contact Widget is a really lightweight, clean and simple widget that collects email addresses to a contact list in your Constant Contact account <sup>(1)</sup> .
 
 * PageSpeed optimized with minimized HTML and inlined javascript (entire widget adds about 1200 bytes).
 * Ajax form submission - no page refresh and minimizes spam.
@@ -20,7 +20,7 @@ Constant Contact Widget is a really lightweight, clean and simple widget that co
 * Lightweight code (~120 lines of PHP code) that does not slow down your site.
 * Clean and simple, with no spurious text, images, advertising or links.
 * No CSS so you can style it to match your theme.
-* Does not send any information to our servers or any other third party servers, it only interfaces with Constant Contact[^2].
+* Does not send any information to our servers or any other third party servers, it only interfaces with Constant Contact <sup>(2)</sup>.
 
 Constant Contact Widget lets you setup:
 
@@ -33,9 +33,9 @@ Constant Contact Widget lets you setup:
 
 Constant Contact Widget supports multiple widgets each with separate settings - for example, you can specify a different Constant Contact list for each Constant Contact widget.
 
-[^1] Constant Contact account required.
+ <sup>(1)</sup> Constant Contact account required.
 
-[^2] This plugin connects to Constant Contact API at ccprod.roving.com, note that Roving Software (roving.com) is the parent company of Constant Contact. 
+ <sup>(2)</sup> This plugin connects to Constant Contact API at ccprod.roving.com, note that Roving Software (roving.com) is the parent company of Constant Contact. 
 
 == Installation ==
 
