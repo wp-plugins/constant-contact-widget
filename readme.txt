@@ -18,8 +18,8 @@ Constant Contact Widget is a really lightweight, clean and simple widget that co
 * Ajax form submission - no page refresh and minimizes spam.
 * Cross-browser compliant javascript with no dependencies (no jQuery required).
 * Lightweight code (~120 lines of PHP code) that does not slow down your site.
-* Clean and simple, with no spurious text, images, advertising or links.
 * No CSS so you can style it to match your theme.
+* Clean and simple, with no spurious text, images, advertising or links.
 * Does not send any information to our servers or any other third party servers, it only interfaces with Constant Contact <sup>(2)</sup>.
 
 Constant Contact Widget lets you setup:
@@ -58,6 +58,14 @@ This widget is designed to add a email address to your Constant Contact list, so
 The Constant Contact widget is contained within a widget div element with the class "widget_sf_widget_constantcontact". 
 
 Using your favourite browser developer tool, see what styles your theme is applying to the widget, and add the class ".widget_sf_widget_constantcontact" to increase the priority of your style to target the Constant Contact widget.
+
+= Does the Constant Contact Widget collect and monitor stats? =
+
+Nope. Constant Contact Widget is designed to do a simple thing well, and do it efficiently.
+
+= How does the Constant Contact widget help combat spam? =
+
+It uses javascript to submit the form via Ajax, the HTML form element doesn't expose an action or method. This makes it harder for a automated crawler to post spam via the form, as most crawlers do not run javascript.
 
 == Changelog ==
 
