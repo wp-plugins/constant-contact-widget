@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.6
+Version: 1.7
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -116,7 +116,7 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 			.'<input type="submit" value="'.esc_attr($instance['btn']).'" />'
 			.'</form>'
 			.'<script>function '.$id.'_submit(n){'
-				.'for(var i=n.firstChild,eml=false,val=["action=constantcontactadd"];i;i=i.nextSibling)if(!(i.nodeName!="INPUT"||!i.name)){if(!(i.name!="eml"||!i.value)) eml=true;val.push(i.name+"="+encodeURIComponent(i.value));}'
+				.'for(var a=n.querySelectorAll("input"),i=0,eml=false,val=["action=constantcontactadd"];i<a.length;i++)if(a[i].name){if(!(a[i].name!="eml"||!a[i].value)) eml=true;val.push(a[i].name+"="+encodeURIComponent(a[i].value));}'
 				.'if(!eml){alert("'.__('Please enter an email address').'");return false;}'
 				.'var xml=new XMLHttpRequest();'
 				.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'

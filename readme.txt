@@ -4,7 +4,7 @@ Donate link: http://memberfind.me
 Tags: constant contact
 Requires at least: 3.0.1
 Tested up to: 3.8.1
-Stable tag: 1.6
+Stable tag: 1.7
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,22 +70,25 @@ It uses javascript to submit the form via Ajax, the HTML form element doesn't ex
 == Changelog ==
 
 = 1.0 =
-* Initial release
+* First release of Constant Contact Widget
 
 = 1.1 =
-* Improved error handling
+* Improved error handling and feedback in Constant Contact Widget
 
 = 1.2 =
-* Replaced WP deprecated function attribute_escape
+* Replaced deprecated WordPress function attribute_escape
 
 = 1.3 =
-* Option to collect names
+* Added option to collect names to Constant Contact Widget
 
 = 1.4 =
-* Javascript rewritten to be wptexturize friendly when using the_widget() call
+* Javascript rewritten to be wptexturize friendly when Constant Contact is embedded using the_widget()
 
 = 1.5 =
-* Allows redirection to url on success
+* Constant Contact Widget now allows redirection to url on success
 
 = 1.6 =
-* Wrapped in form element, allows enter key to submit form
+* Wrapped Constant Contact widget in form element, allows enter key to submit form
+
+= 1.7 =
+* Javascript is now tolerant of extra html elements in the Constant Contact Widget
