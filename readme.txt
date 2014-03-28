@@ -4,7 +4,7 @@ Donate link: http://memberfind.me
 Tags: constant contact
 Requires at least: 3.0.1
 Tested up to: 3.8.1
-Stable tag: 1.7
+Stable tag: 1.8
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Constant Contact plugin that adds a really lightweight, clean and simple widget 
 
 == Description ==
 
-Constant Contact Widget is a really lightweight, clean and simple widget that collects email addresses to a contact list in your Constant Contact account <sup>(1)</sup> .
+Constant Contact Widget is a really lightweight, clean and simple widget that collects email addresses to a contact list in your Constant Contact account.
 
 * PageSpeed optimized with minimized HTML and inlined javascript (entire widget adds about 1200 bytes).
 * Ajax form submission - no page refresh and minimizes spam.
@@ -20,7 +20,7 @@ Constant Contact Widget is a really lightweight, clean and simple widget that co
 * Lightweight code (~120 lines of PHP code) that does not slow down your site.
 * No CSS so you can style it to match your theme.
 * Clean and simple, with no spurious text, images, advertising or links.
-* Does not send any information to our servers or any other third party servers, it only interfaces with Constant Contact <sup>(2)</sup>.
+* Does not send any information to our servers or any other third party servers, it only interfaces with Constant Contact.
 
 Constant Contact Widget lets you setup:
 
@@ -29,13 +29,15 @@ Constant Contact Widget lets you setup:
 * Text for the submit button
 * Constant Contact list to add the email address to
 * Option to request first and last name
-* Display a thank you message or redirect to a URL upon successful submission to Constant Contact
+* Display a thank you message upon successful submission to Constant Contact
 
-Constant Contact Widget supports multiple widgets each with separate settings - for example, you can specify a different Constant Contact list for each Constant Contact widget.
+You can also setup the Constant Contact Widget to redirect to a URL upon successful submission of information to Constant Contact.
 
- <sup>(1)</sup> Constant Contact account required.
+You can load multiple Constant Contact Widgets each with distinct settings - for example, you can specify a different Constant Contact list for each Constant Contact widget.
 
- <sup>(2)</sup> This plugin connects to Constant Contact API at ccprod.roving.com, note that Roving Software (roving.com) is the parent company of Constant Contact. 
+New for 1.8! Constant Contact Widget can now be loaded on a page using a shortcode. Multiple Constant Contact Widgets can be loaded, using shortcodes or widgets or combinations of both.
+
+Note: Constant Contact account required.
 
 == Installation ==
 
@@ -52,6 +54,18 @@ Constant Contact Widget supports multiple widgets each with separate settings - 
 = Can I use this plugin without a Constant Contact account? =
 
 This widget is designed to add a email address to your Constant Contact list, so you will need a Constant Contact account.
+
+= Using the Constant Contact Widget shortcode =
+
+Use the following shortcode:
+
+[constantcontactwidget grp="constant contact list name" btn="button text" msg="success message"]
+
+If you wish to also ask for the first and last name, add nam="1" like this:
+
+[constantcontactwidget nam="1" grp="constant contact list name" btn="button text" msg="success message"]
+
+If you like to redirect the visitor to another page after a successful submission with the Constant Contact Widget, simply place the url in the msg attribute instead of a message.
 
 = How do I style the Constant Contact widget? =
 
@@ -92,3 +106,7 @@ It uses javascript to submit the form via Ajax, the HTML form element doesn't ex
 
 = 1.7 =
 * Javascript is now tolerant of extra html elements in the Constant Contact Widget
+
+= 1.8 =
+* Adds shortcode feature
+* Fixed issues with encoding of Constant Contact list names

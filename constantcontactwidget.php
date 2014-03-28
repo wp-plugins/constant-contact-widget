@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.7
+Version: 1.8
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -37,26 +37,26 @@ if (is_admin()) {
 function sf_constantcontact_ajax() {
 	ob_clean();
 	$set=get_option('sf_mcc');
-	if (empty($set['log'])||empty($set['pwd']))
+	if (empty($set)||empty($set['log'])||empty($set['pwd']))
 		echo __('Plugin settings incomplete');
 	else if (empty($_POST['grp']))
 		echo __('No contact list specified');
 	else if (empty($_POST['eml']))
 		echo __('No email provided');
 	else {
-		$rsp=wp_remote_get("http://ccprod.roving.com/roving/wdk/API_AddSiteVisitor.jsp?"
-			.'loginName='.urlencode($set['log'])
-			.'&loginPassword='.urlencode($set['pwd'])
-			.'&ea='.urlencode($_POST['eml'])
-			.'&ic='.urlencode($_POST['grp'])
-			.(empty($_POST['fnm'])?'':('&First_Name='.urlencode(strip_tags($_POST['fnm']))))
-			.(empty($_POST['lnm'])?'':('&Last_Name='.urlencode(strip_tags($_POST['lnm'])))));
+		$rsp=wp_remote_get("http://api.constantcontact.com/0.1/API_AddSiteVisitor.jsp?"
+			.'loginName='.rawurlencode($set['log'])
+			.'&loginPassword='.rawurlencode($set['pwd'])
+			.'&ea='.rawurlencode($_POST['eml'])
+			.'&ic='.rawurlencode($_POST['grp'])
+			.(empty($_POST['fnm'])?'':('&First_Name='.rawurlencode(strip_tags($_POST['fnm']))))
+			.(empty($_POST['lnm'])?'':('&Last_Name='.rawurlencode(strip_tags($_POST['lnm'])))));
 		if (is_wp_error($rsp))
 			echo __('Could not connect to Constant Contact');
 		else {
 			$rsp=explode("\n",$rsp['body']);
 			if (intval($rsp[0]))
-				echo count($rsp)>1?$rsp[1]:(intval($rsp[0])==400?__('Constant Contact username/password not accepted'):__('Constant Contact error'));
+				echo !empty($rsp[1])?$rsp[1]:(intval($rsp[0])==400?__('Constant Contact username/password not accepted'):__('Constant Contact error'));
 		}
 	}
 	die();
@@ -79,8 +79,8 @@ function sf_constantcontact_options() {
 	settings_fields("sf_constantcontact_group");
 	$set=get_option('sf_mcc');
 	echo '<table class="form-table">'
-		.'<tr valign="top"><th scope="row">Constant Contact Username</th><td><input type="text" name="sf_mcc[log]" value="'.(isset($set['log'])?$set['log']:'').'" /></td></tr>'
-		.'<tr valign="top"><th scope="row">Constant Contact Password</th><td><input type="password" name="sf_mcc[pwd]" value="'.(isset($set['pwd'])?$set['pwd']:'').'" /></td></tr>'
+		.'<tr valign="top"><th scope="row">Constant Contact Username</th><td><input type="text" name="sf_mcc[log]" value="'.(isset($set['log'])?$set['log']:'').'"/></td></tr>'
+		.'<tr valign="top"><th scope="row">Constant Contact Password</th><td><input type="password" name="sf_mcc[pwd]" value="'.(isset($set['pwd'])?$set['pwd']:'').'"/></td></tr>'
 		.'</table>'
 		.'<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Save"></p>'
 		.'</form></div>';
@@ -89,6 +89,29 @@ function sf_constantcontact_validate($in) {
 	$in['log']=trim($in['log']);
 	$in['pwd']=trim($in['pwd']);
 	return $in;
+}
+
+function sf_constantcontact_form($id,$p) {
+	return '<form id="'.$id.'_form" onsubmit="return '.$id.'_submit(this);">'
+		.(empty($p['txt'])?'':('<p>'.$p['txt'].'</p>'))
+		.'<input type="hidden" name="grp" value="'.esc_attr($p['grp']).'" />'
+		.(empty($p['nam'])
+			?('<input type="text" name="eml" class="input" placeholder="'.__('Email').'"/>')
+			:('<p><label for="fnm">'.__('First Name').'</label><input type="text" name="fnm" class="input"/></p>'
+			.'<p><label for="lnm">'.__('Last Name').'</label><input type="text" name="lnm" class="input"/></p>'
+			.'<p><label for="eml">'.__('Email').'</label><input type="text" name="eml" class="input"/></p>'))
+		.'<input type="submit" value="'.esc_attr($p['btn']).'" />'
+		.'</form>'
+		.'<script>function '.$id.'_submit(n){'
+			.'for(var a=n.querySelectorAll("input"),i=0,eml=false,val=["action=constantcontactadd"];i<a.length;i++)if(a[i].name){if(!(a[i].name!="eml"||!a[i].value)) eml=true;val.push(a[i].name+"="+encodeURIComponent(a[i].value));}'
+			.'if(!eml){alert("'.__('Please enter an email address').'");return false;}'
+			.'var xml=new XMLHttpRequest();'
+			.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
+			.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
+			.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$p['msg'])?('setTimeout(\'window.location="'.esc_attr($p['msg']).'";\',100);'):('n.innerHTML="'.esc_attr($p['msg']).'";')).'} else alert(this.statusText);}};'
+			.'xml.send(val.join(String.fromCharCode(38)));'
+			.'return false;'
+		.'}</script>';
 }
 
 if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widget {
@@ -102,30 +125,9 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 		if (empty($title))
 			echo str_replace('widget_sf_widget_constantcontact','widget_sf_widget_constantcontact widget_no_title',$before_widget);
 		else
-			echo $before_widget;
-		if (!empty($title))
-			echo $before_title.$title.$after_title;
-		echo '<form id="'.$id.'_form" onsubmit="return '.$id.'_submit(this);">'
-			.(empty($instance['txt'])?'':('<p>'.$instance['txt'].'</p>'))
-			.'<input type="hidden" name="grp" value="'.esc_attr($instance['grp']).'" />'
-			.(empty($instance['nam'])
-				?('<input type="text" name="eml" class="input" placeholder="'.__('Email').'" />')
-				:('<label for="fnm">'.__('First Name').'</label><input type="text" name="fnm" class="input" />'
-				.'<label for="lnm">'.__('Last Name').'</label><input type="text" name="lnm" class="input" />'
-				.'<label for="eml">'.__('Email').'</label><input type="text" name="eml" class="input" />'))
-			.'<input type="submit" value="'.esc_attr($instance['btn']).'" />'
-			.'</form>'
-			.'<script>function '.$id.'_submit(n){'
-				.'for(var a=n.querySelectorAll("input"),i=0,eml=false,val=["action=constantcontactadd"];i<a.length;i++)if(a[i].name){if(!(a[i].name!="eml"||!a[i].value)) eml=true;val.push(a[i].name+"="+encodeURIComponent(a[i].value));}'
-				.'if(!eml){alert("'.__('Please enter an email address').'");return false;}'
-				.'var xml=new XMLHttpRequest();'
-				.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
-				.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
-				.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$instance['msg'])?('setTimeout(\'window.location="'.esc_attr($instance['msg']).'";\',100);'):('n.innerHTML="'.esc_attr($instance['msg']).'";')).'} else alert(this.statusText);}};'
-				.'xml.send(val.join(String.fromCharCode(38)));'
-				.'return false;'
-			.'}</script>';
-		echo $after_widget;
+			echo $before_widget.$before_title.$title.$after_title;
+		echo sf_constantcontact_form($id,array_intersect_key($instance,array('grp'=>1,'nam'=>1,'txt'=>1,'msg'=>1,'btn'=>1)))
+			.$after_widget;
 	}
 	public function update($new_instance,$old_instance ) {
 		$instance=$old_instance;
@@ -139,13 +141,19 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 	}
 	public function form($instance) {
 		$instance=wp_parse_args($instance,array('title'=>'','txt'=>'','btn'=>'Subscribe','log'=>'','pwd'=>'','grp'=>'General Interest','msg'=>'Thank you, you\'ve been added to the list!','nam'=>''));
-		echo '<p><label for="'.$this->get_field_id('title').'">Title:</label><input class="widefat" id="'.$this->get_field_id('title').'" name="'.$this->get_field_name('title').'" type="text" value="'.esc_attr($instance['title']).'" /></p>'
-			.'<p><label for="'.$this->get_field_id('txt').'">Description:</label><input class="widefat" id="'.$this->get_field_id('txt').'" name="'.$this->get_field_name('txt').'" type="text" value="'.esc_attr($instance['txt']).'" placeholder="description" /></p>'
-			.'<p><label for="'.$this->get_field_id('btn').'">Button Text:</label><input class="widefat" id="'.$this->get_field_id('btn').'" name="'.$this->get_field_name('btn').'" type="text" value="'.esc_attr($instance['btn']).'" placeholder="button text" /></p>'
-			.'<p><label for="'.$this->get_field_id('grp').'">Contact List Name:</label><input class="widefat" id="'.$this->get_field_id('grp').'" name="'.$this->get_field_name('grp').'" type="text" value="'.esc_attr($instance['grp']).'" /></p>'
-			.'<p><label for="'.$this->get_field_id('msg').'">Success Message/URL:</label><input class="widefat" id="'.$this->get_field_id('msg').'" name="'.$this->get_field_name('msg').'" type="text" value="'.esc_attr($instance['msg']).'" /></p>'
-			.'<p><input type="checkbox" id="'.$this->get_field_id('nam').'" name="'.$this->get_field_name('nam').'" value="1"'.(empty($instance['nam'])?'':' checked').'> <label for="'.$this->get_field_id('nam').'">Ask for first and last name</label></p>';
+		echo '<p><label for="'.$this->get_field_id('title').'">Title:</label><input class="widefat" id="'.$this->get_field_id('title').'" name="'.$this->get_field_name('title').'" type="text" value="'.esc_attr($instance['title']).'"/></p>'
+			.'<p><label for="'.$this->get_field_id('txt').'">Description:</label><input class="widefat" id="'.$this->get_field_id('txt').'" name="'.$this->get_field_name('txt').'" type="text" value="'.esc_attr($instance['txt']).'" placeholder="description"/></p>'
+			.'<p><label for="'.$this->get_field_id('btn').'">Button Text:</label><input class="widefat" id="'.$this->get_field_id('btn').'" name="'.$this->get_field_name('btn').'" type="text" value="'.esc_attr($instance['btn']).'" placeholder="button text"/></p>'
+			.'<p><label for="'.$this->get_field_id('grp').'">Contact List Name:</label><input class="widefat" id="'.$this->get_field_id('grp').'" name="'.$this->get_field_name('grp').'" type="text" value="'.esc_attr($instance['grp']).'"/></p>'
+			.'<p><label for="'.$this->get_field_id('msg').'">Success Message/URL:</label><input class="widefat" id="'.$this->get_field_id('msg').'" name="'.$this->get_field_name('msg').'" type="text" value="'.esc_attr($instance['msg']).'"/></p>'
+			.'<p><input type="checkbox" id="'.$this->get_field_id('nam').'" name="'.$this->get_field_name('nam').'" value="1"'.(empty($instance['nam'])?'':' checked').'/> <label for="'.$this->get_field_id('nam').'">Ask for first and last name</label></p>';
 	}
 }}
+
+function sf_constantcontact_shortcode($att) {
+	STATIC $sf_constantcontact_id=0;
+	return sf_constantcontact_form('sf_shortcode_constantcontact_'.($sf_constantcontact_id++),shortcode_atts(array('grp'=>'General Interest','nam'=>'','txt'=>'','msg'=>'Thank you, you\'ve been added to the list!','btn'=>'Subscribe'),$att,'constantcontactwidget'));
+}
+add_shortcode('constantcontactwidget','sf_constantcontact_shortcode');
 
 ?>
