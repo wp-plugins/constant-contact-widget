@@ -69,9 +69,9 @@ If you like to redirect the visitor to another page after a successful submissio
 
 = How do I style the Constant Contact widget? =
 
-The Constant Contact widget is contained within a widget div element with the class "widget_sf_widget_constantcontact". 
+The Constant Contact widget is contained within a widget div element with the class "widget\_sf\_widget\_constantcontact". 
 
-Using your favourite browser developer tool, see what styles your theme is applying to the widget, and add the class ".widget_sf_widget_constantcontact" to increase the priority of your style to target the Constant Contact widget.
+Using your favourite browser developer tool, see what styles your theme is applying to the widget, and add the class ".widget\_sf\_widget_constantcontact" to increase the priority of your style to target the Constant Contact widget.
 
 = Does the Constant Contact Widget collect and monitor stats? =
 
@@ -90,13 +90,13 @@ It uses javascript to submit the form via Ajax, the HTML form element doesn't ex
 * Improved error handling and feedback in Constant Contact Widget
 
 = 1.2 =
-* Replaced deprecated WordPress function attribute_escape
+* Replaced deprecated WordPress function attribute\_escape
 
 = 1.3 =
 * Added option to collect names to Constant Contact Widget
 
 = 1.4 =
-* Javascript rewritten to be wptexturize friendly when Constant Contact is embedded using the_widget()
+* Javascript rewritten to be wptexturize friendly when Constant Contact is embedded using the\_widget()
 
 = 1.5 =
 * Constant Contact Widget now allows redirection to url on success
