@@ -59,11 +59,11 @@ This widget is designed to add a email address to your Constant Contact list, so
 
 Use the following shortcode:
 
-[constantcontactwidget grp="constant contact list name" btn="button text" msg="success message"]
+\[constantcontactwidget grp="constant contact list name" btn="button text" msg="success message"\]
 
 If you wish to also ask for the first and last name, add nam="1" like this:
 
-[constantcontactwidget nam="1" grp="constant contact list name" btn="button text" msg="success message"]
+\[constantcontactwidget nam="1" grp="constant contact list name" btn="button text" msg="success message"\]
 
 If you like to redirect the visitor to another page after a successful submission with the Constant Contact Widget, simply place the url in the msg attribute instead of a message.
 
