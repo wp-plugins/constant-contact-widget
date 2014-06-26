@@ -4,7 +4,7 @@ Donate link: http://memberfind.me
 Tags: constant contact
 Requires at least: 3.0.1
 Tested up to: 3.8.1
-Stable tag: 1.8
+Stable tag: 1.8.1
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,7 +69,7 @@ If you like to redirect the visitor to another page after a successful submissio
 
 = How do I style the Constant Contact widget? =
 
-The Constant Contact widget is contained within a widget div element with the class "widget\_sf\_widget\_constantcontact". 
+The Constant Contact widget is contained within a form element with the class "constantcontactwidget\_form". 
 
 Using your favourite browser developer tool, see what styles your theme is applying to the widget, and add the class ".widget\_sf\_widget_constantcontact" to increase the priority of your style to target the Constant Contact widget.
 
@@ -110,3 +110,7 @@ It uses javascript to submit the form via Ajax, the HTML form element doesn't ex
 = 1.8 =
 * Adds shortcode feature
 * Fixed issues with encoding of Constant Contact list names
+
+= 1.8.1 =
+* Adds classname to form
+* Allows html in success message

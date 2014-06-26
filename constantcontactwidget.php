@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.8
+Version: 1.8.1
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -92,7 +92,7 @@ function sf_constantcontact_validate($in) {
 }
 
 function sf_constantcontact_form($id,$p) {
-	return '<form id="'.$id.'_form" onsubmit="return '.$id.'_submit(this);">'
+	return '<form id="'.$id.'_form" onsubmit="return '.$id.'_submit(this);" class="constantcontactwidget_form">'
 		.(empty($p['txt'])?'':('<p>'.$p['txt'].'</p>'))
 		.'<input type="hidden" name="grp" value="'.esc_attr($p['grp']).'" />'
 		.(empty($p['nam'])
@@ -108,7 +108,7 @@ function sf_constantcontact_form($id,$p) {
 			.'var xml=new XMLHttpRequest();'
 			.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
 			.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
-			.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$p['msg'])?('setTimeout(\'window.location="'.esc_attr($p['msg']).'";\',100);'):('n.innerHTML="'.esc_attr($p['msg']).'";')).'} else alert(this.statusText);}};'
+			.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$p['msg'])?('setTimeout(\'window.location="'.esc_attr($p['msg']).'";\',100);'):('n.innerHTML="'.addslashes($p['msg']).'";')).'} else alert(this.statusText);}};'
 			.'xml.send(val.join(String.fromCharCode(38)));'
 			.'return false;'
 		.'}</script>';
