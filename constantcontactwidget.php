@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.8.1
+Version: 1.8.2
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -35,7 +35,7 @@ if (is_admin()) {
 }
 
 function sf_constantcontact_ajax() {
-	ob_clean();
+	if (ob_get_contents()) ob_clean();
 	$set=get_option('sf_mcc');
 	if (empty($set)||empty($set['log'])||empty($set['pwd']))
 		echo __('Plugin settings incomplete');
