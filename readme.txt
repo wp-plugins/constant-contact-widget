@@ -3,8 +3,8 @@ Contributors: sourcefound
 Donate link: http://memberfind.me
 Tags: constant contact
 Requires at least: 3.0.1
-Tested up to: 3.8.1
-Stable tag: 1.8.2
+Tested up to: 3.9.2
+Stable tag: 1.9
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,8 @@ You can load multiple Constant Contact Widgets each with distinct settings - for
 
 New for 1.8! Constant Contact Widget can now be loaded on a page using a shortcode. Multiple Constant Contact Widgets can be loaded, using shortcodes or widgets or combinations of both.
 
+New for 1.9! Constant Contact Widget now has the option to require a user to check a checkbox for consent to be added to the Constant Contact mailing list.
+
 Note: Constant Contact account required.
 
 == Installation ==
@@ -48,6 +50,7 @@ Note: Constant Contact account required.
 1. Under the Constant Contact widget settings, you can set the title, description, button text and the name of the Constant Contact list you want the email address to be added to.
 1. You can specify either a success message or an URL. Upon successful submission of the address to Constant Contact, if a message is used, that message will replace the form in the Constant Contact widget box. If a URL is specified, the user will be redirected to that URL.
 1. Option you can also request the first and last name fields on the form.
+1. Option you can also require that the user checks a checkbox for consent to be added to your Constant Contact mailing list.
 
 == Frequently Asked Questions ==
 
@@ -64,6 +67,10 @@ Use the following shortcode:
 If you wish to also ask for the first and last name, add nam="1" like this:
 
 \[constantcontactwidget nam="1" grp="constant contact list name" btn="button text" msg="success message"\]
+
+If you wish to require that the user checks a checkbox for consent to be added to your Constant Contact mailing list, add req="your consent message", for example:
+
+\[constantcontactwidget nam="1" grp="constant contact list name" btn="button text" msg="success message" req="I agree to be added to the mailing list"\]
 
 If you like to redirect the visitor to another page after a successful submission with the Constant Contact Widget, simply place the url in the msg attribute instead of a message.
 
@@ -117,3 +124,6 @@ It uses javascript to submit the form via Ajax, the HTML form element doesn't ex
 
 = 1.8.2 =
 * Prevents warnings from ob_clear
+
+= 1.9 =
+* Adds optional consent required checkbox 

@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.8.2
+Version: 1.9
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -97,18 +97,22 @@ function sf_constantcontact_form($id,$p) {
 		.'<input type="hidden" name="grp" value="'.esc_attr($p['grp']).'" />'
 		.(empty($p['nam'])
 			?('<input type="text" name="eml" class="input" placeholder="'.__('Email').'"/>')
-			:('<p><label for="fnm">'.__('First Name').'</label><input type="text" name="fnm" class="input"/></p>'
-			.'<p><label for="lnm">'.__('Last Name').'</label><input type="text" name="lnm" class="input"/></p>'
-			.'<p><label for="eml">'.__('Email').'</label><input type="text" name="eml" class="input"/></p>'))
+			:('<p><label for="fnm">'.__('First Name').'</label> <input type="text" name="fnm" class="input"/></p>'
+			.'<p><label for="lnm">'.__('Last Name').'</label> <input type="text" name="lnm" class="input"/></p>'
+			.'<p><label for="eml">'.__('Email').'</label> <input type="text" name="eml" class="input"/></p>'))
+		.(empty($p['req'])?'':('<p><input type="checkbox" name="req" class="input"> '.$p['req'].'</p>'))
 		.'<input type="submit" value="'.esc_attr($p['btn']).'" />'
 		.'</form>'
 		.'<script>function '.$id.'_submit(n){'
-			.'for(var a=n.querySelectorAll("input"),i=0,eml=false,val=["action=constantcontactadd"];i<a.length;i++)if(a[i].name){if(!(a[i].name!="eml"||!a[i].value)) eml=true;val.push(a[i].name+"="+encodeURIComponent(a[i].value));}'
+			.'for(var a=n.querySelectorAll("input"),i=0,eml=false,val=["action=constantcontactadd"];i<a.length;i++)if(a[i].name){'
+				.'if(a[i].name=="req"){if(!a[i].checked){alert("'.__('Consent required').'");return false;}}'
+				.'else{if(!(a[i].name!="eml"||!a[i].value))eml=true;val.push(a[i].name+"="+encodeURIComponent(a[i].value));}'
+			.'}'
 			.'if(!eml){alert("'.__('Please enter an email address').'");return false;}'
 			.'var xml=new XMLHttpRequest();'
 			.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
 			.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
-			.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText) alert(this.responseText); else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$p['msg'])?('setTimeout(\'window.location="'.esc_attr($p['msg']).'";\',100);'):('n.innerHTML="'.addslashes($p['msg']).'";')).'} else alert(this.statusText);}};'
+			.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText)alert(this.responseText);else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$p['msg'])?('setTimeout(\'window.location="'.esc_attr($p['msg']).'";\',100);'):('n.innerHTML="'.addslashes($p['msg']).'";')).'}else alert(this.statusText);}};'
 			.'xml.send(val.join(String.fromCharCode(38)));'
 			.'return false;'
 		.'}</script>';
@@ -126,7 +130,7 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 			echo str_replace('widget_sf_widget_constantcontact','widget_sf_widget_constantcontact widget_no_title',$before_widget);
 		else
 			echo $before_widget.$before_title.$title.$after_title;
-		echo sf_constantcontact_form($id,array_intersect_key($instance,array('grp'=>1,'nam'=>1,'txt'=>1,'msg'=>1,'btn'=>1)))
+		echo sf_constantcontact_form($id,array_intersect_key($instance,array('grp'=>1,'nam'=>1,'txt'=>1,'msg'=>1,'btn'=>1,'req'=>1)))
 			.$after_widget;
 	}
 	public function update($new_instance,$old_instance ) {
@@ -134,16 +138,18 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 		$instance['title']=strip_tags($new_instance['title']);
 		$instance['txt']=trim($new_instance['txt']);
 		$instance['btn']=trim($new_instance['btn']);
+		$instance['req']=trim($new_instance['req']);
 		$instance['grp']=trim($new_instance['grp']);
 		$instance['msg']=trim($new_instance['msg']);
 		if (!empty($new_instance['nam'])) $instance['nam']=1; else unset($instance['nam']);
 		return $instance;
 	}
 	public function form($instance) {
-		$instance=wp_parse_args($instance,array('title'=>'','txt'=>'','btn'=>'Subscribe','log'=>'','pwd'=>'','grp'=>'General Interest','msg'=>'Thank you, you\'ve been added to the list!','nam'=>''));
+		$instance=wp_parse_args($instance,array('title'=>'','grp'=>'General Interest','nam'=>'','txt'=>'','msg'=>'Thank you, you\'ve been added to the list!','btn'=>'Subscribe','req'=>''));
 		echo '<p><label for="'.$this->get_field_id('title').'">Title:</label><input class="widefat" id="'.$this->get_field_id('title').'" name="'.$this->get_field_name('title').'" type="text" value="'.esc_attr($instance['title']).'"/></p>'
 			.'<p><label for="'.$this->get_field_id('txt').'">Description:</label><input class="widefat" id="'.$this->get_field_id('txt').'" name="'.$this->get_field_name('txt').'" type="text" value="'.esc_attr($instance['txt']).'" placeholder="description"/></p>'
 			.'<p><label for="'.$this->get_field_id('btn').'">Button Text:</label><input class="widefat" id="'.$this->get_field_id('btn').'" name="'.$this->get_field_name('btn').'" type="text" value="'.esc_attr($instance['btn']).'" placeholder="button text"/></p>'
+			.'<p><label for="'.$this->get_field_id('req').'">Consent Checkbox Text (leave empty for no checkbox):</label><input class="widefat" id="'.$this->get_field_id('req').'" name="'.$this->get_field_name('req').'" type="text" value="'.esc_attr($instance['req']).'" placeholder="optional"/></p>'
 			.'<p><label for="'.$this->get_field_id('grp').'">Contact List Name:</label><input class="widefat" id="'.$this->get_field_id('grp').'" name="'.$this->get_field_name('grp').'" type="text" value="'.esc_attr($instance['grp']).'"/></p>'
 			.'<p><label for="'.$this->get_field_id('msg').'">Success Message/URL:</label><input class="widefat" id="'.$this->get_field_id('msg').'" name="'.$this->get_field_name('msg').'" type="text" value="'.esc_attr($instance['msg']).'"/></p>'
 			.'<p><input type="checkbox" id="'.$this->get_field_id('nam').'" name="'.$this->get_field_name('nam').'" value="1"'.(empty($instance['nam'])?'':' checked').'/> <label for="'.$this->get_field_id('nam').'">Ask for first and last name</label></p>';
@@ -152,7 +158,7 @@ if (class_exists('WP_Widget')) { class sf_widget_constantcontact extends WP_Widg
 
 function sf_constantcontact_shortcode($att) {
 	STATIC $sf_constantcontact_id=0;
-	return sf_constantcontact_form('sf_shortcode_constantcontact_'.($sf_constantcontact_id++),shortcode_atts(array('grp'=>'General Interest','nam'=>'','txt'=>'','msg'=>'Thank you, you\'ve been added to the list!','btn'=>'Subscribe'),$att,'constantcontactwidget'));
+	return sf_constantcontact_form('sf_shortcode_constantcontact_'.($sf_constantcontact_id++),shortcode_atts(array('grp'=>'General Interest','nam'=>'','txt'=>'','msg'=>'Thank you, you\'ve been added to the list!','btn'=>'Subscribe','req'=>''),$att,'constantcontactwidget'));
 }
 add_shortcode('constantcontactwidget','sf_constantcontact_shortcode');
 
