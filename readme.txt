@@ -3,8 +3,8 @@ Contributors: sourcefound
 Donate link: http://memberfind.me
 Tags: constant contact
 Requires at least: 3.0.1
-Tested up to: 3.9.2
-Stable tag: 1.9
+Tested up to: 4.2.2
+Stable tag: 1.9.1
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,3 +127,6 @@ It uses javascript to submit the form via Ajax, the HTML form element doesn't ex
 
 = 1.9 =
 * Adds optional consent required checkbox 
+
+= 1.9.1 =
+* Uses SSL endpoint for Constant Contact API

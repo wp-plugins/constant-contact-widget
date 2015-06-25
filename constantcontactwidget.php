@@ -3,7 +3,7 @@
 Plugin Name: Constant Contact Widget
 Plugin URI: http://memberfind.me
 Description: Constant Contant widget for submitting email address
-Version: 1.9
+Version: 1.9.1
 Author: SourceFound
 Author URI: http://memberfind.me
 License: GPL2
@@ -44,7 +44,7 @@ function sf_constantcontact_ajax() {
 	else if (empty($_POST['eml']))
 		echo __('No email provided');
 	else {
-		$rsp=wp_remote_get("http://api.constantcontact.com/0.1/API_AddSiteVisitor.jsp?"
+		$rsp=wp_remote_get("https://api.constantcontact.com/0.1/API_AddSiteVisitor.jsp?"
 			.'loginName='.rawurlencode($set['log'])
 			.'&loginPassword='.rawurlencode($set['pwd'])
 			.'&ea='.rawurlencode($_POST['eml'])
@@ -97,22 +97,22 @@ function sf_constantcontact_form($id,$p) {
 		.'<input type="hidden" name="grp" value="'.esc_attr($p['grp']).'" />'
 		.(empty($p['nam'])
 			?('<input type="text" name="eml" class="input" placeholder="'.__('Email').'"/>')
-			:('<p><label for="fnm">'.__('First Name').'</label> <input type="text" name="fnm" class="input"/></p>'
-			.'<p><label for="lnm">'.__('Last Name').'</label> <input type="text" name="lnm" class="input"/></p>'
-			.'<p><label for="eml">'.__('Email').'</label> <input type="text" name="eml" class="input"/></p>'))
+			:('<p><label>'.__('First Name').'</label> <input type="text" name="fnm" class="input"/></p>'
+			.'<p><label>'.__('Last Name').'</label> <input type="text" name="lnm" class="input"/></p>'
+			.'<p><label>'.__('Email').'</label> <input type="text" name="eml" class="input"/></p>'))
 		.(empty($p['req'])?'':('<p><input type="checkbox" name="req" class="input"> '.$p['req'].'</p>'))
 		.'<input type="submit" value="'.esc_attr($p['btn']).'" />'
 		.'</form>'
 		.'<script>function '.$id.'_submit(n){'
-			.'for(var a=n.querySelectorAll("input"),i=0,eml=false,val=["action=constantcontactadd"];i<a.length;i++)if(a[i].name){'
-				.'if(a[i].name=="req"){if(!a[i].checked){alert("'.__('Consent required').'");return false;}}'
-				.'else{if(!(a[i].name!="eml"||!a[i].value))eml=true;val.push(a[i].name+"="+encodeURIComponent(a[i].value));}'
+			.'for(var a=n.querySelectorAll("input"),i=0,eml=false,val=["action=constantcontactadd"];a[i];i++)if(a[i].name){'
+				.'if(a[i].name=="req"){if(!a[i].checked){alert("'.__('Consent required').'");return false;} }'
+				.'else{if(!(a[i].name!="eml"||!a[i].value))eml=true;val.push(a[i].name+"="+encodeURIComponent(a[i].value));} '
 			.'}'
 			.'if(!eml){alert("'.__('Please enter an email address').'");return false;}'
 			.'var xml=new XMLHttpRequest();'
 			.'xml.open("POST","'.admin_url('admin-ajax.php').'",true);'
 			.'xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");'
-			.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText)alert(this.responseText);else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$p['msg'])?('setTimeout(\'window.location="'.esc_attr($p['msg']).'";\',100);'):('n.innerHTML="'.addslashes($p['msg']).'";')).'}else alert(this.statusText);}};'
+			.'xml.onreadystatechange=function(){if(this.readyState==4){if(this.status==200){if(this.responseText)alert(this.responseText);else '.(preg_match('/^\/\/|^http:\/\/|^https:\/\//i',$p['msg'])?('setTimeout(\'window.location="'.esc_attr($p['msg']).'";\',100);'):('n.innerHTML="'.addslashes($p['msg']).'";')).'}else alert(this.statusText);} };'
 			.'xml.send(val.join(String.fromCharCode(38)));'
 			.'return false;'
 		.'}</script>';
